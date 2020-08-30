@@ -1,0 +1,9 @@
+.popup {
+    width: 120px; 
+    height: 40px; 
+    color: white; 
+    background-color: green; 
+    padding: 10px; 
+    position: absolute;
+    display: none;
+}
