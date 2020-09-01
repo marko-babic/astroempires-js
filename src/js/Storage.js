@@ -27,7 +27,7 @@ export default {
 
     async clearAllItems() {
         browser.storage.local.get().then((items) => {
-            for (const [key, value] of Object.entries(items)) {
+            for (const [key] of Object.entries(items)) {
                 if (key.includes(this.getPrefix())) {
                     browser.storage.local.remove(key);
                 }

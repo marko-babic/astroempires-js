@@ -16,7 +16,7 @@ export default class Landing {
         let fleetRows = tbody.getElementsByTagName('tr');
 
         for (let row of fleetRows) {
-            if (row.className  === 'listing-header') {
+            if (row.className === 'listing-header') {
                 continue;
             }
 

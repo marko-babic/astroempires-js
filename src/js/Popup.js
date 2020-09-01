@@ -1,8 +1,8 @@
 export default class Popup{
     constructor() {
-        this.div = document.createElement("div");
-        this.div.className = "popup";
-        this.div.id = "colors";
+        this.div = document.createElement('div');
+        this.div.className = 'popup';
+        this.div.id = 'colors';
     }
     
     init() {
@@ -15,16 +15,16 @@ export default class Popup{
     }
 
     createColorPallete() {
-        let colorFlex = document.createElement("div");
-        colorFlex.className = "flex";
-        let colorOptions = ["blue", "black", "white", "red", "orange"];
+        let colorFlex = document.createElement('div');
+        colorFlex.className = 'flex';
+        let colorOptions = ['blue', 'black', 'white', 'red', 'orange'];
 
         for (let color of colorOptions) {
-            let colorOption = document.createElement("div");
-            colorOption.style = "background-color:" + color;
-            colorOption.className = "color-option";
+            let colorOption = document.createElement('div');
+            colorOption.style = 'background-color:' + color;
+            colorOption.className = 'color-option';
 
-            colorOption.addEventListener("click", () => {
+            colorOption.addEventListener('click', () => {
                 colorOption.dispatchEvent(new CustomEvent('color-picked', {
                     bubbles: true,
                     detail: { color: color }
