@@ -1,69 +1,71 @@
-export default class Popup{
-    constructor() {
-        this.div = document.createElement("div");
-        this.div.className = "popup";
-        this.div.id = "colors";
-    }
-    
-    init() {
-        let colorFlex = this.createColorPallete();
+/* eslint-disable class-methods-use-this */
+export default class Popup {
+  constructor() {
+    this.div = document.createElement('div');
+    this.div.className = 'popup';
+    this.div.id = 'colors';
+  }
 
-        this.div.appendChild(colorFlex);
-        this.div.appendChild(this.createCancelButton());
+  init() {
+    const colorFlex = this.createColorPallete();
 
-        document.body.appendChild(this.div);
-    }
+    this.div.appendChild(colorFlex);
+    this.div.appendChild(this.createCancelButton());
 
-    createColorPallete() {
-        let colorFlex = document.createElement("div");
-        colorFlex.className = "flex";
-        let colorOptions = ["blue", "black", "white", "red", "orange"];
+    document.body.appendChild(this.div);
+  }
 
-        for (let color of colorOptions) {
-            let colorOption = document.createElement("div");
-            colorOption.style = "background-color:" + color;
-            colorOption.className = "color-option";
+  createColorPallete() {
+    const colorFlex = document.createElement('div');
+    colorFlex.className = 'flex';
+    const colorOptions = ['blue', 'black', 'white', 'red', 'orange'];
 
-            colorOption.addEventListener("click", () => {
-                colorOption.dispatchEvent(new CustomEvent('color-picked', {
-                    bubbles: true,
-                    detail: { color: color }
-                }));
-            });
-            
-            colorFlex.appendChild(colorOption);
-        }
+    // eslint-disable-next-line no-restricted-syntax
+    for (const color of colorOptions) {
+      const colorOption = document.createElement('div');
+      colorOption.style = `background-color:${color}`;
+      colorOption.className = 'color-option';
 
-        return colorFlex;
-    }
+      colorOption.addEventListener('click', () => {
+        colorOption.dispatchEvent(new CustomEvent('color-picked', {
+          bubbles: true,
+          detail: { color },
+        }));
+      });
 
-     createCancelButton() {
-        let span = document.createElement('span');
-        let close = document.createTextNode('x');
-
-        span.addEventListener('click', () => {
-            this.hide();
-        });
-
-        span.className = 'action-text';
-        span.appendChild(close);
-
-        return span;
+      colorFlex.appendChild(colorOption);
     }
 
-    getElement() {
-        return this.div;
-    }
+    return colorFlex;
+  }
 
-    show(x, y) {
-        let element = this.getElement();
+  createCancelButton() {
+    const span = document.createElement('span');
+    const close = document.createTextNode('x');
 
-        element.style.top = y + 'px';
-        element.style.left = x + 'px';
-        element.style.display = 'block';
-    }
+    span.addEventListener('click', () => {
+      this.hide();
+    });
 
-    hide() {
-        this.getElement().style.display = 'none';
-    }
+    span.className = 'action-text';
+    span.appendChild(close);
+
+    return span;
+  }
+
+  getElement() {
+    return this.div;
+  }
+
+  show(x, y) {
+    const element = this.getElement();
+
+    element.style.top = `${y}px`;
+    element.style.left = `${x}px`;
+    element.style.display = 'block';
+  }
+
+  hide() {
+    this.getElement().style.display = 'none';
+  }
 }

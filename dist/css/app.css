@@ -7,3 +7,28 @@
     position: absolute;
     display: none;
 }
+
+.action-text:hover {
+    cursor: pointer;
+    color: yellow;
+}
+
+.flex {
+    display: flex;
+}
+
+.color-option {
+    width: 10px;
+    height: 10px;
+    margin: 5px;
+    border: 1px solid black;
+}
+
+.color-option:hover {
+    border: 1px solid pink;
+    cursor: pointer;
+}
+
+.ml-5 {
+    margin-left: 15px;
+}
