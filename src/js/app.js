@@ -1,20 +1,20 @@
-import Landing from './Landing.js';
-import Attack from './Attack.js';
+import Landing from './Landing';
+import Attack from './Attack';
 
 browser.storage.local.get('isEnabled').then((item) => {
-    if (item.isEnabled) {
-        let fleetsRoot =  document.getElementById('map_fleets');
-        let attackList = document.getElementById('fleets_attack-list');
-    
-        if (fleetsRoot) {
-            let landing = new Landing(fleetsRoot);
-            landing.sort();
-            landing.showClearFleet();
-        }
-    
-        if (attackList) {
-            let attack = new Attack(attackList);
-            attack.markSelectedTargets();
-        }
+  if (item.isEnabled) {
+    const fleetsRoot = document.getElementById('map_fleets');
+    const attackList = document.getElementById('fleets_attack-list');
+
+    if (fleetsRoot) {
+      const landing = new Landing(fleetsRoot);
+      landing.sort();
+      landing.showClearFleet();
     }
+
+    if (attackList) {
+      const attack = new Attack(attackList);
+      attack.markSelectedTargets();
+    }
+  }
 });
