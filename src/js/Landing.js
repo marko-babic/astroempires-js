@@ -1,112 +1,119 @@
-import Popup from './Popup.js';
-import Storage from './Storage.js';
+/* eslint-disable class-methods-use-this */
+import Popup from './Popup';
+import Storage from './Storage';
 
 export default class Landing {
-    
-    constructor(fleetsRoot) {
-        this.fleetsRoot = fleetsRoot;
-        this.popup = new Popup();
+  constructor(fleetsRoot) {
+    this.fleetsRoot = fleetsRoot;
+    this.popup = new Popup();
 
-        this.popup.getElement().addEventListener('color-picked', (event) => {
-            this.updateRow(event);
+    this.popup.getElement().addEventListener('color-picked', (event) => {
+      this.updateRow(event);
+    });
+
+    this.popup.init();
+  }
+
+  getFleetRows() {
+    const fleetTable = this.fleetsRoot.getElementsByClassName('layout listing btnlisting tbllisting1 sorttable');
+    const tbody = fleetTable[0].getElementsByTagName('tbody')[0];
+
+    return tbody.getElementsByTagName('tr');
+  }
+
+  async createTableColumn(row) {
+    const rowCopy = row;
+    const id = this.getId(row);
+    const color = await this.getItem(id);
+    const sign = color ? 'x' : '+';
+    rowCopy.style.backgroundColor = color || '';
+
+    const td = document.createElement('td');
+    const textnode = document.createTextNode(sign);
+    td.className = 'action-text';
+    td.appendChild(textnode);
+
+    td.addEventListener('click', async (event) => {
+      const tr = event.target.parentElement;
+
+      if (await this.getItem(id)) {
+        this.removeItem(id);
+        tr.style.backgroundColor = '';
+        tr.lastChild.innerText = '+';
+        this.updateActiveElement(undefined);
+        return true;
+      }
+
+      this.popup.show(event.pageX - 150, event.pageY);
+      this.updateActiveElement(tr);
+
+      return true;
+    });
+
+    return td;
+  }
+
+  async sort() {
+    const fleetRows = this.getFleetRows();
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const row of fleetRows) {
+      this.createTableColumn(row)
+        .then((column) => {
+          row.appendChild(column);
         });
-
-        this.popup.init();
     }
+  }
 
-    getFleetRows() {
-        let fleetTable = this.fleetsRoot.getElementsByClassName('layout listing btnlisting tbllisting1 sorttable');
-        let tbody = fleetTable[0].getElementsByTagName('tbody')[0];
- 
-        return tbody.getElementsByTagName('tr');
-    }
+  getId(row) {
+    const url = row.firstChild.firstChild.href;
+    const id = url.split('=');
+    return id[1];
+  }
 
-    async createTableColumn(row) {
-        let id = this.getId(row);
-        let color = await this.getItem(id);
-        let sign = color ? 'x' : '+';
-        row.style.backgroundColor = color ? color : '';
+  setItem(id, color) {
+    Storage.setItem(id, color);
+  }
 
-        let td = document.createElement('td');
-        let textnode = document.createTextNode(sign);
-        td.className = 'action-text';
-        td.appendChild(textnode); 
+  removeItem(id) {
+    Storage.removeItem(id);
+  }
 
-        td.addEventListener('click', async (event) => {
-            let tr = event.target.parentElement;
+  async getItem(id) {
+    return Storage.getItem(id);
+  }
 
-            if (await this.getItem(id)) {
-                this.removeItem(id);
-                tr.style.backgroundColor = '';
-                tr.lastChild.innerText = '+';
-                this.updateActiveElement(undefined);
-                return true;
-            }
-            
-            this.popup.show(event.pageX - 150, event.pageY);
-            this.updateActiveElement(tr);
-        });
+  updateActiveElement(element) {
+    this.activeElement = element;
+  }
 
-        return td;
-    }
+  updateRow(event) {
+    this.activeElement.style.backgroundColor = event.detail.color;
+    const id = this.getId(this.activeElement);
 
-    async sort() {
-        let fleetRows = this.getFleetRows();
+    this.setItem(id, event.detail.color);
+    this.popup.hide();
+    this.activeElement.lastChild.innerText = 'x';
+    this.activeElement = undefined;
+  }
 
-        for (let row of fleetRows) {
-            let td = await this.createTableColumn(row);
-            row.appendChild(td);
-        }
-    }
+  showClearFleet() {
+    const moveHere = document.getElementById('link_fleet_move_here');
 
-    getId(row) {
-        let url = row.firstChild.firstChild.href;
-        let id = url.split('=');
-        return id[1];
-    }
+    const parent = moveHere.parentElement;
 
-    setItem(id, color) {
-        Storage.setItem(id, color);
-    }
+    const span = document.createElement('span');
+    const close = document.createTextNode('Click to clear ALL marked fleets');
 
-    removeItem(id) {
-        Storage.removeItem(id);
-    }
+    span.addEventListener('click', async () => {
+      await Storage.clearAllItems();
+      // eslint-disable-next-line no-restricted-globals
+      location.reload();
+    });
 
-    async getItem(id) {
-        return await Storage.getItem(id);
-    }
+    span.className = 'action-text ml-5';
+    span.appendChild(close);
 
-    updateActiveElement(element) {
-        this.activeElement = element;
-    }
-
-    updateRow(event) {
-        this.activeElement.style.backgroundColor = event.detail.color;
-        let id = this.getId(this.activeElement);
-
-        this.setItem(id, event.detail.color);
-        this.popup.hide();
-        this.activeElement.lastChild.innerText = 'x';
-        this.activeElement = undefined;
-    }
-
-    showClearFleet() {
-        let moveHere = document.getElementById('link_fleet_move_here');
-
-        let parent = moveHere.parentElement;
-
-        let span = document.createElement('span');
-        let close = document.createTextNode('Click to clear ALL marked fleets');
-
-        span.addEventListener('click', async () => {
-            await Storage.clearAllItems();
-            location.reload();
-        });
-
-        span.className = 'action-text ml-5';
-        span.appendChild(close);
-
-        parent.appendChild(span);
-    }
+    parent.appendChild(span);
+  }
 }
