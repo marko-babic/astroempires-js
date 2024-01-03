@@ -10,9 +10,9 @@ AE.js is a simple javascript helper for browser based game Astroempires (https:/
 
 Navigate to root folder of the project and exceute command "gulp". "Dist" folder was built under these specifications:
 
-OS: Windows 10
-Node: v13.9.0
-Npm: 6.13.7
+OS: Mac OS 14.1
+Node: v21.5.0
+Npm: 10.2.4
 
 ### Installation
 
