@@ -55,7 +55,6 @@ export default class Landing {
 
   async sort() {
     const fleetRows = this.getFleetRows();
-
     // eslint-disable-next-line no-restricted-syntax
     for (const row of fleetRows) {
       this.createTableColumn(row)
@@ -66,7 +65,7 @@ export default class Landing {
   }
 
   getId(row) {
-    const url = row.firstChild.firstChild.href;
+    const url = row.firstElementChild.firstElementChild.href;
     const id = url.split('=');
     return id[1];
   }
