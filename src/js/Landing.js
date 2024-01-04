@@ -3,10 +3,10 @@ import Popup from './Popup';
 import Storage from './Storage';
 
 export default class Landing {
-  constructor(fleetsRoot) {
+  constructor(fleetsRoot, styleSelector) {
     this.fleetsRoot = fleetsRoot;
     this.popup = new Popup();
-
+    this.styleSelector = styleSelector;
     this.popup.getElement().addEventListener('color-picked', (event) => {
       this.updateRow(event);
     });
@@ -15,7 +15,7 @@ export default class Landing {
   }
 
   getFleetRows() {
-    const fleetTable = this.fleetsRoot.getElementsByClassName('layout listing btnlisting tbllisting1 sorttable');
+    const fleetTable = this.fleetsRoot.getElementsByClassName(this.styleSelector.style.fleetRows);
     const tbody = fleetTable[0].getElementsByTagName('tbody')[0];
 
     return tbody.getElementsByTagName('tr');

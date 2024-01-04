@@ -2,7 +2,6 @@ var gulp        = require('gulp');
 var browserSync = require('browser-sync').create();
 var browserify = require('gulp-browserify');
 var uglify = require('gulp-terser');
-//var babel = require('gulp-babel')
 
 gulp.task('js', function () {
     return gulp.src('src/js/app.js')

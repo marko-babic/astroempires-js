@@ -2,11 +2,12 @@
 import Storage from './Storage';
 
 export default class Landing {
-  constructor(fleetsRoot) {
-    this.fleetTable = fleetsRoot.getElementsByClassName('layout listing btnlisting tbllisting1');
+  constructor(fleetsRoot, styleSelector) {
+    this.styleSelector = styleSelector;
+    this.fleetTable = fleetsRoot.getElementsByClassName(this.styleSelector.style.fleetTable);
   }
 
-  markSelectedTargets() {
+  async markSelectedTargets() {
     if (!this.fleetTable) {
       return false;
     }
@@ -20,7 +21,12 @@ export default class Landing {
     for (const row of fleetRows) {
       if (row.className !== 'listing-header') {
         const id = this.getId(row);
-        const color = Storage.getItem(id);
+
+        if (id === null) {
+          continue;
+        }
+
+        const color = await Storage.getItem(id);
 
         if (color) {
           row.style.backgroundColor = color;
@@ -32,9 +38,15 @@ export default class Landing {
   }
 
   getId(row) {
-    const url = row.firstElementChild.firstElementChild.href;
-    const [, id] = url.split('=');
+    const tr = row.firstElementChild;
 
-    return id;
+    if (tr.firstElementChild && tr.firstElementChild.href) {
+      const url = tr.firstElementChild.href;
+      const [, id] = url.split('=');
+  
+      return id;
+    }
+
+    return null;
   }
 }
